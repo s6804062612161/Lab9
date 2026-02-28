@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 int checkLogin(char *login, char *passwd);
-//accepted only if Length 5-8  The first Char not a number and 2 Uppercase or more and 2 digit or more
+//accepted only if Length 5-8  and 2 Uppercase or more and not repeat Uppercase and 2 digit or more
 int checkValidPass(char *ps,int size);
 
 int main() {
@@ -25,27 +25,35 @@ int main() {
 
 
 int checkValidPass(char *ps,int size) {
-	int accepted=0;	
 	int count=0;
-	int i;
+	int uppercase=0;
+	int i,j;
+	if (size<5||size>8) 
+		return 0;
+			
 	for (i=0;i<size;i++){
 		if (ps[i]>=48 && ps[i]<=57)
 			count++;
+		if (ps[i]>='A' && ps[i]<='Z')
+			uppercase++;		
 	}
-	int uppercase=0;
-	for (i=0;i<size;i++){
-		if (ps[i]>=65 && ps[i]<=90)
-			uppercase++;
-	}
-	if (count&&size>=5&&size<=8) 
-		accepted=1;
-	if (ps[0]>=48&&ps[0]<=57)
-		accepted=0;
 	
-	return accepted;
+	if (count<2||uppercase<2) 
+		return 0;	
+		
+	for(i=0;i<size;i++){
+		if(ps[i]>='A'&&ps[i]<='Z'){
+			for(j=i+1;j<size;j++){
+				if(ps[i]==ps[j])
+					return 0;
+			}
+		}
+	}
+	return 1;		
 }
+
 int checkLogin(char *login, char *passwd) {
-	if( !strcmp(login, "student1") && !strcmp(passwd, "mPASS505"))
+	if( !strcmp(login, "student1") && !strcmp(passwd, "mPAS505"))
 		return 1;
 	else
 		return 0;
